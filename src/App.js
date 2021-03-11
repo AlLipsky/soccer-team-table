@@ -1,35 +1,49 @@
 import "./App.css";
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { TeamTable } from "./TeamTable";
 
+const fetchData = async (callback) => {
+  try {
+    const { data } = await axios.get(
+      "https://www.thesportsdb.com/api/v1/json/1/search_all_teams.php?l=English%20Premier%20League"
+    );
+    const teams = data.teams.map((team) => ({ ...team, isChecked: false }));
+    callback(teams);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 function App() {
   const [teamList, setTeamList] = useState([]);
-  const [favoriteTeamInputChecked, setFavoriteTeam] = useState([]);
-  // make independent util and put it there
-  const fetchData = async () => {
-    try {
-      const { data } = await axios.get(
-        "https://www.thesportsdb.com/api/v1/json/1/search_all_teams.php?l=English%20Premier%20League"
-      );
-      console.log("data", data);
-      const teams = data.teams.map((team) => ({ ...team, isChecked: false }));
-      setTeamList(teams);
-      console.log("teamList", teamList);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const favoriteInputHandler = (id) => {
-    console.log("id", id);
-    if (favoriteTeamInputChecked.includes(id)) {
-      setFavoriteTeam((prevState) => prevState.filter((item) => item !== id));
-    } else {
-      setFavoriteTeam((prevState) => [...prevState, id]);
-    }
-  };
+  const [favoriteTeamInputChecked, setFavoriteTeam] = useState(
+    (localStorage.getItem("favoriteTeams") &&
+      JSON.parse(localStorage.getItem("favoriteTeams"))) ||
+      []
+  );
 
-  useEffect(() => fetchData(), []);
+  const favoriteInputHandler = useCallback(
+    (id) => {
+      if (favoriteTeamInputChecked.includes(id)) {
+        setFavoriteTeam((prevState) => prevState.filter((item) => item !== id));
+      } else {
+        setFavoriteTeam((prevState) => [...prevState, id]);
+      }
+    },
+    [favoriteTeamInputChecked, setFavoriteTeam]
+  );
+
+  useEffect(() => fetchData(setTeamList), []);
+
+  useEffect(
+    () =>
+      localStorage.setItem(
+        "favoriteTeams",
+        JSON.stringify(favoriteTeamInputChecked)
+      ),
+    [favoriteTeamInputChecked]
+  );
 
   return (
     <div className="container">
