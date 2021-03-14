@@ -1,6 +1,7 @@
-// import { React } from "react";
 import { Table } from "react-bootstrap";
 import { TeamTableRow } from "./TeamTableRow";
+import { Loader } from "../Utils/Loader";
+import "./TeamTable.css";
 
 export const TeamTable = ({
   teamList,
@@ -8,36 +9,31 @@ export const TeamTable = ({
   favoriteElements,
 }) => {
   const teamRowsArray =
-    teamList.map((item, index) => {
+    teamList.map((team, index) => {
       return (
         <TeamTableRow
+          {...team}
+          key={index}
           index={index + 1}
-          // team={item}
-          crest={item.strTeamBadge}
-          // {...item}
-          name={item.strTeam}
-          founded={item.intFormedYear}
           isChecked={favoriteElements.includes(index + 1)}
           addToFavoriteInputHandler={() => addToFavoriteInputHandler(index + 1)}
         />
       );
     }) || [];
-  return (
-    <Table
-      striped
-      bordered
-      style={{ fontSize: "2rem", alignContent: "right", margin: "1rem" }}
-    >
+  return teamRowsArray.length > 0 ? (
+    <Table striped bordered className="table">
       <thead>
         <tr>
           <th></th>
           <th>Crest</th>
           <th>Team name</th>
-          <th>founded</th>
+          <th>Founded</th>
           <th>Add to favorite</th>
         </tr>
       </thead>
       <tbody>{teamRowsArray}</tbody>
     </Table>
+  ) : (
+    <Loader />
   );
 };
