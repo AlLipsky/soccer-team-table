@@ -1,7 +1,7 @@
 import "./App.css";
 import { React, useState, useEffect } from "react";
 import { TeamTable } from "./TeamTable/TeamTable";
-import { fetchData } from "./Utils/FetchDataFunction";
+import { fetchData } from "./Utils/Functions/fetchDataFunction";
 
 const App = () => {
   const [teamList, setTeamList] = useState([]);

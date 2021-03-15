@@ -1,6 +1,6 @@
 import { Table } from "react-bootstrap";
 import { TeamTableRow } from "./TeamTableRow";
-import { Loader } from "../Utils/Loader";
+import { Loader } from "../Utils/Loader/Loader";
 import "./TeamTable.css";
 
 export const TeamTable = ({
