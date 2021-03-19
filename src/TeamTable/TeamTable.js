@@ -3,11 +3,7 @@ import { TeamTableRow } from "./TeamTableRow";
 import { Loader } from "../Utils/Loader/Loader";
 import "./TeamTable.css";
 
-export const TeamTable = ({
-  teamList,
-  addToFavoriteInputHandler,
-  favoriteElements,
-}) => {
+export const TeamTable = ({ teamList, favoriteElements }) => {
   const teamRowsArray =
     teamList.map((team, index) => {
       return (
@@ -16,7 +12,6 @@ export const TeamTable = ({
           key={index}
           index={index + 1}
           isChecked={favoriteElements.includes(index + 1)}
-          addToFavoriteInputHandler={() => addToFavoriteInputHandler(index + 1)}
         />
       );
     }) || [];

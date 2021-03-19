@@ -1,6 +1,11 @@
 import "./TeamTableRow.css";
+import { useContext } from "react";
+import { AddToFavoriteInputHandlerContext } from "../App";
 
 export const TeamTableRow = (team) => {
+  const addToFavoriteInputHandlerContext = useContext(
+    AddToFavoriteInputHandlerContext
+  );
   return (
     <tr>
       <td>{team.index}</td>
@@ -17,7 +22,7 @@ export const TeamTableRow = (team) => {
         <input
           type="checkbox"
           checked={team.isChecked}
-          onChange={team.addToFavoriteInputHandler}
+          onChange={() => addToFavoriteInputHandlerContext(team.index)}
         />
       </td>
     </tr>

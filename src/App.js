@@ -1,7 +1,9 @@
 import "./App.css";
-import { React, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { TeamTable } from "./TeamTable/TeamTable";
 import { fetchData } from "./Utils/Functions/fetchDataFunction";
+
+export const AddToFavoriteInputHandlerContext = React.createContext();
 
 const App = () => {
   const [teamList, setTeamList] = useState([]);
@@ -10,7 +12,6 @@ const App = () => {
       JSON.parse(localStorage.getItem("favoriteTeams"))) ||
       []
   );
-
   const favoriteInputHandler = (id) => {
     if (favoriteTeamList.includes(id)) {
       setFavoriteTeam((prevState) => prevState.filter((item) => item !== id));
@@ -28,11 +29,13 @@ const App = () => {
   );
   return (
     <div className="container">
-      <TeamTable
-        teamList={teamList}
-        favoriteElements={favoriteTeamList}
-        addToFavoriteInputHandler={favoriteInputHandler}
-      />
+      <AddToFavoriteInputHandlerContext.Provider value={favoriteInputHandler}>
+        <TeamTable
+          teamList={teamList}
+          favoriteElements={favoriteTeamList}
+          addToFavoriteInputHandler={favoriteInputHandler}
+        />
+      </AddToFavoriteInputHandlerContext.Provider>
     </div>
   );
 };
